@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Brand Colors */
+  --color-primary: #88D498;
+  /* Grass Green */
+  --color-secondary: #FF6B6B;
+  /* Soft Red */
+  --color-accent: #4ECDC4;
+  /* Teal */
+
+  /* Backgrounds */
+  --bg-color: #AECFEF;
+  /* Default Sky */
+
+  /* Card */
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-shadow:
+    inset 6px 6px 12px 0 rgba(255, 255, 255, 0.8),
+    inset -6px -6px 12px 0 rgba(0, 0, 0, 0.1),
+    8px 8px 24px rgba(0, 0, 0, 0.15);
+  --card-radius: 24px;
+
+  /* Text */
+  --text-main: #2D3436;
+  --text-muted: #636E72;
+}
+
+body.dark {
+  --bg-color: #1A237E;
+
+  --card-bg: rgba(30, 40, 60, 0.85);
+  --card-shadow:
+    inset 4px 4px 10px 0 rgba(255, 255, 255, 0.1),
+    inset -4px -4px 10px 0 rgba(0, 0, 0, 0.3),
+    8px 8px 24px rgba(0, 0, 0, 0.4);
+
+  --text-main: #DFE6E9;
+  --text-muted: #B2BEC3;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Fredoka', sans-serif;
+  color: var(--text-main);
+  background: var(--bg-color);
+  transition: background 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Utilities */
+.container {
+  max-width: 480px;
+  /* Mobile first constraint */
+  margin: 0 auto;
+  padding: 24px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.clay-card {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 24px;
+  width: 100%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.2s ease;
+}
+
+.clay-text-large {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-main);
+  margin-bottom: 16px;
+}
+
+.clay-btn {
+  width: 100%;
+  padding: 20px;
+  border: none;
+  border-radius: 999px;
+  /* Pill shape */
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  /* Default Green */
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow:
+    inset 4px 4px 8px rgba(255, 255, 255, 0.4),
+    inset -4px -4px 8px rgba(0, 0, 0, 0.1),
+    4px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.clay-btn:active {
+  transform: scale(0.98);
+  box-shadow:
+    inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.2);
+}
+
+.clay-btn.secondary {
+  background: var(--color-secondary);
+}
+
+.clay-btn.outline {
+  background: transparent;
+  border: 3px solid var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: none;
+}
