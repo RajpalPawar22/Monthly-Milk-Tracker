@@ -517,7 +517,7 @@ export default function Home() {
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                   {t.customAmount}
                 </label>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'stretch' }}>
                   <input
                     type="number"
                     step="0.5"
@@ -526,10 +526,12 @@ export default function Home() {
                     style={{
                       flex: 1,
                       padding: '12px',
-                      borderRadius: '12px',
-                      border: '1px solid rgba(0,0,0,0.1)',
-                      fontSize: '1.1rem',
-                      background: 'rgba(255,255,255,0.5)'
+                      borderRadius: '16px',
+                      border: 'none',
+                      fontSize: '1.2rem',
+                      fontWeight: 'bold',
+                      background: 'rgba(255,255,255,0.8)',
+                      boxShadow: 'inset 2px 2px 5px rgba(0,0,0,0.05)'
                     }}
                   />
                   <button
@@ -545,7 +547,17 @@ export default function Home() {
                       }
                     }}
                     className="clay-btn"
-                    style={{ width: 'auto', padding: '12px 16px', fontSize: '1rem' }}
+                    style={{
+                      width: 'auto',
+                      padding: '0 24px',
+                      fontSize: '1rem',
+                      borderRadius: '16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: 'var(--color-primary)',
+                      color: darkMode ? '#ffffff' : '#1f2937'
+                    }}
                   >
                     {t.save}
                   </button>
