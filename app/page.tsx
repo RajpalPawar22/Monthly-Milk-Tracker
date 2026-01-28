@@ -92,6 +92,46 @@ const translations = {
       totalLiters: 'कुल लीटर',
       estCost: 'अनुमानित खर्च'
     }
+  },
+  mr: {
+    title: 'डेली दूध',
+    todayTab: 'आज',
+    calendarTab: 'कैलेंडर',
+    statsTab: 'आकडेवारी',
+    didMilkArrive: 'आज दूध आले का?',
+    yes1L: 'हो, नेहमीप्रमाणे',
+    noMilk: 'आज दूध नाही',
+    savedYes: '✅ जतन केले: आजसाठी जोडले!',
+    savedNo: '❌ जतन केले: आज दूध नाही.',
+    thisMonth: 'या महिन्यात',
+    clickEdit: 'बदलण्यासाठी तारीख निवडा',
+    monthlyBill: 'मासिक बिल',
+    estBill: 'अंदाजे बिल',
+    totalMilk: 'या महिन्यात एकूण दूध',
+    settings: 'सेटिंग्ज',
+    pricePerLiter: 'प्रति लिटर किंमत (₹)',
+    defaultAmount: 'सामान्य प्रमाण (L)',
+    theme: 'थीम',
+    language: 'भाषा',
+    light: 'लाईट',
+    dark: 'डार्क',
+    editTitle: 'संपादित करा',
+    yesOption: 'हो, नेहमीप्रमाणे',
+    noOption: 'दूध नाही (0L)',
+    cancel: 'रद्द करा',
+    save: 'जतन करा',
+    customAmount: 'कस्टम प्रमाण (L)',
+    arrivalTime: 'दूध येण्याची वेळ',
+    reminderTitle: 'दूध आले का?',
+    reminderBody: 'नोंद करायला विसरू नका! 🐮',
+    testNotification: 'नोटिफिकेशन तपासा',
+    statsDashboard: {
+      title: 'मासिक अहवाल',
+      daysTaken: 'दूध घेतले',
+      daysMissed: 'घेतले नाही',
+      totalLiters: 'एकूण लिटर',
+      estCost: 'अंदाजे खर्च'
+    }
   }
 };
 
@@ -118,7 +158,8 @@ export default function Home() {
   const [darkMode, setDarkMode] = useState(true); // Default True (Dark)
 
   // Language State
-  const [language, setLanguage] = useState<'en' | 'hi'>('en'); // Default English
+  // Language State
+  const [language, setLanguage] = useState<'en' | 'hi' | 'mr'>('en'); // Default English
   const t = translations[language];
 
   // Initialize Theme & Language & Default Amount
@@ -136,8 +177,8 @@ export default function Home() {
       document.body.classList.add('dark');
     }
 
-    if (savedLang === 'en' || savedLang === 'hi') {
-      setLanguage(savedLang);
+    if (savedLang === 'en' || savedLang === 'hi' || savedLang === 'mr') {
+      setLanguage(savedLang as 'en' | 'hi' | 'mr');
     } else {
       // Default to English
       setLanguage('en');
@@ -596,7 +637,7 @@ export default function Home() {
               {'<'}
             </button>
             <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>
-              {viewDate.toLocaleDateString(language === 'en' ? 'en-US' : 'hi-IN', { month: 'long', year: 'numeric' })}
+              {viewDate.toLocaleDateString(language === 'en' ? 'en-US' : (language === 'mr' ? 'mr-IN' : 'hi-IN'), { month: 'long', year: 'numeric' })}
             </div>
             <button
               onClick={() => changeMonth(1)}
@@ -698,7 +739,7 @@ export default function Home() {
                 {'<'}
               </button>
               <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--color-primary)' }}>
-                {t.monthlyBill}: {viewDate.toLocaleDateString(language === 'en' ? 'en-US' : 'hi-IN', { month: 'long', year: 'numeric' })}
+                {t.monthlyBill}: {viewDate.toLocaleDateString(language === 'en' ? 'en-US' : (language === 'mr' ? 'mr-IN' : 'hi-IN'), { month: 'long', year: 'numeric' })}
               </div>
               <button
                 onClick={() => changeMonth(1)}
@@ -867,6 +908,13 @@ export default function Home() {
                     style={{ padding: '12px', fontSize: '1rem' }}
                   >
                     Hindi
+                  </button>
+                  <button
+                    onClick={() => { setLanguage('mr'); localStorage.setItem('daily-doodh-lang', 'mr'); }}
+                    className={`clay-btn ${language === 'mr' ? '' : 'outline'}`}
+                    style={{ padding: '12px', fontSize: '1rem' }}
+                  >
+                    Marathi
                   </button>
                 </div>
               </div>
