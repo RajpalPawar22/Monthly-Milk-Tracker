@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Daily Doodh",
   description: "Simple Milk Tracker for Home",
   manifest: "/manifest.json",
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
