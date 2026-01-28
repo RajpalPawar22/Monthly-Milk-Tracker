@@ -434,7 +434,7 @@ export default function Home() {
             }}
           >
             <Image
-              src="/assets/cow-3d.png"
+              src="/assets/cow-popup.png"
               alt="Happy Cow"
               width={280}
               height={280}
@@ -627,8 +627,9 @@ export default function Home() {
                   }
                 }
                 else {
-                  bg = 'var(--color-secondary)'; // Red
-                  textColor = '#fff'; // Red always looks good with white
+                  bg = 'var(--card-bg)'; // Whiteish/Glass
+                  border = '2px solid var(--color-secondary)'; // Red border to signify missed
+                  textColor = 'var(--text-main)';
                 }
               }
 
@@ -659,8 +660,8 @@ export default function Home() {
                 >
                   {day.day}
                   {entry && (
-                    <div style={{ fontSize: '0.7rem', marginTop: '2px', fontWeight: '500' }}>
-                      {entry.amount}L
+                    <div style={{ fontSize: entry.amount === 0 ? '1rem' : '0.7rem', marginTop: '2px', fontWeight: '500' }}>
+                      {entry.amount === 0 ? '❌' : `${entry.amount}L`}
                     </div>
                   )}
                 </button>
