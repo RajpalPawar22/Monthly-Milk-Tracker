@@ -982,7 +982,7 @@ export default function Home() {
         fontSize: '0.9rem',
         opacity: 0.8
       }}>
-        Made with ❤️ by Rajpal
+        Made with ❤️ and 🥛 by Rajpal Pawar
       </footer>
 
       <style jsx>{`
