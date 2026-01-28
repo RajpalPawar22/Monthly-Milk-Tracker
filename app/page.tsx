@@ -974,6 +974,17 @@ export default function Home() {
         </div>
       )}
 
+      <footer style={{
+        marginTop: '40px',
+        textAlign: 'center',
+        padding: '20px',
+        color: 'var(--text-muted)',
+        fontSize: '0.9rem',
+        opacity: 0.8
+      }}>
+        Made with ❤️ by Rajpal
+      </footer>
+
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
