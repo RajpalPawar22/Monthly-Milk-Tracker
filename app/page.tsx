@@ -115,10 +115,10 @@ export default function Home() {
   const [editingDate, setEditingDate] = useState<string | null>(null);
 
   // Theme State
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true); // Default True (Dark)
 
   // Language State
-  const [language, setLanguage] = useState<'en' | 'hi'>('hi');
+  const [language, setLanguage] = useState<'en' | 'hi'>('en'); // Default English
   const t = translations[language];
 
   // Initialize Theme & Language & Default Amount
@@ -127,16 +127,20 @@ export default function Home() {
     const savedLang = localStorage.getItem('daily-doodh-lang');
     const savedDefault = localStorage.getItem('daily-doodh-default');
 
-    if (savedTheme === 'dark') {
-      setDarkMode(true);
-      document.body.classList.add('dark');
-    } else if (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if (savedTheme === 'light') {
+      setDarkMode(false);
+      document.body.classList.remove('dark');
+    } else {
+      // Default to Dark
       setDarkMode(true);
       document.body.classList.add('dark');
     }
 
     if (savedLang === 'en' || savedLang === 'hi') {
       setLanguage(savedLang);
+    } else {
+      // Default to English
+      setLanguage('en');
     }
 
     if (savedDefault) {
@@ -228,7 +232,7 @@ export default function Home() {
       // alert('Sent! Check your notification center.'); 
     } catch (e) {
       console.error('Notification Error:', e);
-      alert('Failed to send notification. Check console for details.');
+      // alert('Failed to send notification. Check console for details.');
     }
   };
 
@@ -541,7 +545,7 @@ export default function Home() {
                       }
                     }}
                     className="clay-btn"
-                    style={{ width: 'auto', padding: '12px 24px', fontSize: '1rem', minWidth: '100px' }}
+                    style={{ width: 'auto', padding: '12px 16px', fontSize: '1rem' }}
                   >
                     {t.save}
                   </button>
@@ -591,7 +595,7 @@ export default function Home() {
             </button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px', marginTop: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', marginTop: '16px' }}>
             {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
               <div key={i} style={{ textAlign: 'center', fontWeight: 'bold', color: 'var(--text-muted)' }}>{d}</div>
             ))}
@@ -645,7 +649,7 @@ export default function Home() {
                     borderRadius: '12px',
                     border: border,
                     cursor: isDisabled ? 'not-allowed' : 'pointer',
-                    fontSize: '0.9rem',
+                    fontSize: '0.8rem',
                     fontWeight: '700',
                     color: entry ? textColor : 'var(--text-main)',
                     position: 'relative',
