@@ -151,11 +151,6 @@ export default function Home() {
     localStorage.setItem('daily-doodh-theme', newMode ? 'dark' : 'light');
   };
 
-  const toggleLanguage = () => {
-    const newLang = language === 'en' ? 'hi' : 'en';
-    setLanguage(newLang);
-    localStorage.setItem('daily-doodh-lang', newLang);
-  };
 
   // Request Notification Permissions on Load
   useEffect(() => {

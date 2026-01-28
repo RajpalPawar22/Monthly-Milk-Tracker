@@ -4,6 +4,12 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Daily Doodh",
   description: "Simple Milk Tracker for Home",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Daily Doodh",
+  },
 };
 
 export const viewport: Viewport = {
