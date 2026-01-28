@@ -558,15 +558,15 @@ export default function Home() {
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                   {t.customAmount}
                 </label>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'stretch' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <input
                     type="number"
                     step="0.5"
                     placeholder="0"
                     id="today-custom-amount"
                     style={{
-                      flex: 1,
-                      padding: '12px',
+                      width: '100%',
+                      padding: '16px',
                       borderRadius: '16px',
                       border: 'none',
                       fontSize: '1.2rem',
@@ -589,9 +589,9 @@ export default function Home() {
                     }}
                     className="clay-btn"
                     style={{
-                      width: 'auto',
-                      padding: '0 24px',
-                      fontSize: '1rem',
+                      width: '100%',
+                      padding: '16px',
+                      fontSize: '1.1rem',
                       borderRadius: '16px',
                       display: 'flex',
                       alignItems: 'center',
