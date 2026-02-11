@@ -233,9 +233,8 @@ export default function Home() {
     const arrivalTime = new Date();
     arrivalTime.setHours(hours, minutes, 0, 0);
 
-    const reminderTime = new Date(arrivalTime.getTime() + 10 * 60000); // +10 minutes
-
-    if (now >= reminderTime) {
+    // FIX: Removed 10-minute delay. Notify immediately or after arrival time.
+    if (now >= arrivalTime) {
       // 3. Check if already notified today
       const lastNotifyDate = localStorage.getItem('daily-doodh-last-notify');
       if (lastNotifyDate === todayStr) return; // Already notified today
@@ -265,10 +264,20 @@ export default function Home() {
 
     // 3. Send Notification
     try {
-      new Notification(t.reminderTitle, {
+      const notification = new Notification(t.reminderTitle, {
         body: t.reminderBody,
-        icon: '/assets/cow-icon.png'
+        icon: '/assets/cow-icon.png',
+        vibrate: [200, 100, 200], // Vibration for mobile
+        tag: 'daily-doodh-reminder', // Prevent duplicate notifications
+        requireInteraction: true // Keep notification until user interacts
       });
+
+      // 4. Play Sound (Moo or Bell)
+      const audio = new Audio('/assets/notification.mp3');
+      audio.play().catch(error => {
+        console.warn('Audio play failed (user interaction might be needed first):', error);
+      });
+
       // Optional: Feedback for testing
       // alert('Sent! Check your notification center.'); 
     } catch (e) {
