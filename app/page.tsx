@@ -264,17 +264,25 @@ export default function Home() {
 
     // 3. Send Notification
     try {
-      const notification = new Notification(t.reminderTitle, {
+      const options: any = {
         body: t.reminderBody,
         icon: '/assets/cow-icon.png',
         vibrate: [200, 100, 200], // Vibration for mobile
         tag: 'daily-doodh-reminder', // Prevent duplicate notifications
         requireInteraction: true // Keep notification until user interacts
-      });
+      };
 
-      // 4. Play Sound (Moo or Bell)
-      const audio = new Audio('/assets/notification.mp3');
-      audio.play().catch(error => {
+      const notification = new Notification(t.reminderTitle, options);
+
+      // 4. Play Sound (Cycle Horn, trimmed)
+      const audio = new Audio('/assets/Cycle%20Horn%20Sound%20Effect%20%20HD.mp3');
+      audio.play().then(() => {
+        // Trim to 1.5 seconds
+        setTimeout(() => {
+          audio.pause();
+          audio.currentTime = 0;
+        }, 1500);
+      }).catch(error => {
         console.warn('Audio play failed (user interaction might be needed first):', error);
       });
 
