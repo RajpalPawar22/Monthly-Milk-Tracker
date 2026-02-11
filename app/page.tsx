@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ClayCard } from './components/ClayCard/ClayCard';
 import { BubblyButton } from './components/BubblyButton/BubblyButton';
 import Image from 'next/image';
@@ -45,6 +45,7 @@ const translations = {
     reminderTitle: 'Did the milk arrive?',
     reminderBody: 'Don\'t forget to log it! 🐮',
     testNotification: 'Test Notification',
+    addToCalendar: 'Add Daily Reminder',
     statsDashboard: {
       title: 'Monthly Snapshot',
       daysTaken: 'Days Taken',
@@ -85,6 +86,7 @@ const translations = {
     reminderTitle: 'क्या दूध आया?',
     reminderBody: 'इसे लिखना न भूलें! 🐮',
     testNotification: 'नोटिफिकेशन टेस्ट करें',
+    addToCalendar: 'दैनिक रिमाइंडर जोड़ें',
     statsDashboard: {
       title: 'मासिक रिपोर्ट',
       daysTaken: 'दूध लिया',
@@ -125,6 +127,7 @@ const translations = {
     reminderTitle: 'दूध आले का?',
     reminderBody: 'नोंद करायला विसरू नका! 🐮',
     testNotification: 'नोटिफिकेशन तपासा',
+    addToCalendar: 'रोजचा रिमाइंडर जोडा',
     statsDashboard: {
       title: 'मासिक अहवाल',
       daysTaken: 'दूध घेतले',
@@ -209,43 +212,7 @@ export default function Home() {
     }
   }, []);
 
-  // Notification Logic (Interval)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Logic: Check every minute
-      checkNotification();
-    }, 60000); // 60 seconds
-
-    return () => clearInterval(interval);
-  }, [milkTime, entries]); // Re-run if milkTime or entries change (to have fresh state)
-
-  const checkNotification = () => {
-    if (notificationPermission !== 'granted') return;
-
-    const now = new Date();
-    const todayStr = now.toLocaleDateString('en-CA');
-
-    // 1. Check if entry exists for today
-    if (entries[todayStr]) return; // Already logged
-
-    // 2. Check Time
-    const [hours, minutes] = milkTime.split(':').map(Number);
-    const arrivalTime = new Date();
-    arrivalTime.setHours(hours, minutes, 0, 0);
-
-    // FIX: Removed 10-minute delay. Notify immediately or after arrival time.
-    if (now >= arrivalTime) {
-      // 3. Check if already notified today
-      const lastNotifyDate = localStorage.getItem('daily-doodh-last-notify');
-      if (lastNotifyDate === todayStr) return; // Already notified today
-
-      // SEND NOTIFICATION
-      sendNotification();
-      localStorage.setItem('daily-doodh-last-notify', todayStr);
-    }
-  };
-
-  const sendNotification = async () => {
+  const sendNotification = useCallback(async () => {
     // 1. Check support
     if (!('Notification' in window)) {
       alert('This browser does not support desktop notification');
@@ -264,6 +231,7 @@ export default function Home() {
 
     // 3. Send Notification
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const options: any = {
         body: t.reminderBody,
         icon: '/assets/cow-icon.png',
@@ -272,7 +240,7 @@ export default function Home() {
         requireInteraction: true // Keep notification until user interacts
       };
 
-      const notification = new Notification(t.reminderTitle, options);
+      new Notification(t.reminderTitle, options);
 
       // 4. Play Sound (Cycle Horn, trimmed)
       const audio = new Audio('/assets/Cycle%20Horn%20Sound%20Effect%20%20HD.mp3');
@@ -292,7 +260,43 @@ export default function Home() {
       console.error('Notification Error:', e);
       // alert('Failed to send notification. Check console for details.');
     }
-  };
+  }, [t]);
+
+  // Notification Logic (Interval)
+  useEffect(() => {
+    const checkNotification = () => {
+      if (notificationPermission !== 'granted') return;
+
+      const now = new Date();
+      const todayStr = now.toLocaleDateString('en-CA');
+
+      // 1. Check if entry exists for today
+      if (entries[todayStr]) return; // Already logged
+
+      // 2. Check Time
+      const [hours, minutes] = milkTime.split(':').map(Number);
+      const arrivalTime = new Date();
+      arrivalTime.setHours(hours, minutes, 0, 0);
+
+      // FIX: Removed 10-minute delay. Notify immediately or after arrival time.
+      if (now >= arrivalTime) {
+        // 3. Check if already notified today
+        const lastNotifyDate = localStorage.getItem('daily-doodh-last-notify');
+        if (lastNotifyDate === todayStr) return; // Already notified today
+
+        // SEND NOTIFICATION
+        sendNotification();
+        localStorage.setItem('daily-doodh-last-notify', todayStr);
+      }
+    };
+
+    const interval = setInterval(() => {
+      // Logic: Check every minute
+      checkNotification();
+    }, 60000); // 60 seconds
+
+    return () => clearInterval(interval);
+  }, [milkTime, entries, notificationPermission, sendNotification]); // Re-run if milkTime or entries change
 
 
   // Load Initial Data
@@ -876,14 +880,42 @@ export default function Home() {
                       <option value="PM">PM</option>
                     </select>
                   </div>
-                  <button
-                    onClick={sendNotification}
-                    className="clay-btn"
-                    style={{ width: 'auto', padding: '0 16px', fontSize: '1.2rem' }}
-                    title={t.testNotification}
-                  >
-                    🔔
-                  </button>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      onClick={sendNotification}
+                      className="clay-btn"
+                      style={{ flex: 1, padding: '12px', fontSize: '1rem' }}
+                      title={t.testNotification}
+                    >
+                      🔔 Test
+                    </button>
+                    <button
+                      onClick={() => {
+                        const [h, m] = milkTime.split(':');
+                        const date = new Date();
+                        // Create a date for the *next* occurrence (or today if not passed)
+                        date.setHours(Number(h), Number(m), 0);
+
+                        // Format for Google Calendar: YYYYMMDDTHHMMSS
+                        const fmt = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, '');
+
+                        const start = fmt(date);
+                        const end = fmt(new Date(date.getTime() + 15 * 60000)); // 15 min duration
+
+                        const text = encodeURIComponent(t.title + " Reminder");
+                        const details = encodeURIComponent(t.reminderBody);
+                        const location = encodeURIComponent("Home");
+
+                        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}&location=${location}&sf=true&output=xml&recur=RRULE:FREQ=DAILY`;
+
+                        window.open(url, '_blank');
+                      }}
+                      className="clay-btn"
+                      style={{ flex: 2, padding: '12px', fontSize: '1rem', background: 'var(--color-secondary)', color: 'white' }}
+                    >
+                      📅 {t.addToCalendar}
+                    </button>
+                  </div>
                 </div>
               </div>
 
