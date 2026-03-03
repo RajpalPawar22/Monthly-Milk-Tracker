@@ -858,8 +858,8 @@ export default function Home() {
               {/* Milk Arrival Time */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label style={{ fontWeight: 600, color: 'var(--text-muted)' }}>{t.arrivalTime}</label>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <div style={{ flex: 1, display: 'flex', gap: '4px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                     {/* Hour */}
                     <select
                       value={(() => {
@@ -880,7 +880,7 @@ export default function Home() {
                         setMilkTime(newTime);
                         localStorage.setItem('daily-doodh-time', newTime);
                       }}
-                      style={{ padding: '12px', borderRadius: '12px', border: 'none', background: 'rgba(0,0,0,0.05)', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '1rem' }}
+                      style={{ padding: '12px', borderRadius: '12px', border: 'none', background: 'rgba(0,0,0,0.05)', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '1rem', flex: 1 }}
                     >
                       {Array.from({ length: 12 }, (_, i) => i + 1).map(h => (
                         <option key={h} value={h}>{h}</option>
@@ -896,7 +896,7 @@ export default function Home() {
                         setMilkTime(newTime);
                         localStorage.setItem('daily-doodh-time', newTime);
                       }}
-                      style={{ padding: '12px', borderRadius: '12px', border: 'none', background: 'rgba(0,0,0,0.05)', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '1rem' }}
+                      style={{ padding: '12px', borderRadius: '12px', border: 'none', background: 'rgba(0,0,0,0.05)', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '1rem', flex: 1 }}
                     >
                       {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map(m => (
                         <option key={m} value={m}>{m}</option>
@@ -917,48 +917,38 @@ export default function Home() {
                         setMilkTime(newTime);
                         localStorage.setItem('daily-doodh-time', newTime);
                       }}
-                      style={{ padding: '12px', borderRadius: '12px', border: 'none', background: 'rgba(0,0,0,0.05)', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '1rem' }}
+                      style={{ padding: '12px', borderRadius: '12px', border: 'none', background: 'rgba(0,0,0,0.05)', fontWeight: 'bold', color: 'var(--text-main)', fontSize: '1rem', flex: 1 }}
                     >
                       <option value="AM">AM</option>
                       <option value="PM">PM</option>
                     </select>
                   </div>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                      onClick={sendNotification}
-                      className="clay-btn"
-                      style={{ flex: 1, padding: '12px', fontSize: '1rem' }}
-                      title={t.testNotification}
-                    >
-                      🔔 Test
-                    </button>
-                    <button
-                      onClick={() => {
-                        const [h, m] = milkTime.split(':');
-                        const date = new Date();
-                        // Create a date for the *next* occurrence (or today if not passed)
-                        date.setHours(Number(h), Number(m), 0);
+                  <button
+                    onClick={() => {
+                      const [h, m] = milkTime.split(':');
+                      const date = new Date();
+                      // Create a date for the *next* occurrence (or today if not passed)
+                      date.setHours(Number(h), Number(m), 0);
 
-                        // Format for Google Calendar: YYYYMMDDTHHMMSS
-                        const fmt = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, '');
+                      // Format for Google Calendar: YYYYMMDDTHHMMSS
+                      const fmt = (d: Date) => d.toISOString().replace(/-|:|\.\d+/g, '');
 
-                        const start = fmt(date);
-                        const end = fmt(new Date(date.getTime() + 15 * 60000)); // 15 min duration
+                      const start = fmt(date);
+                      const end = fmt(new Date(date.getTime() + 15 * 60000)); // 15 min duration
 
-                        const text = encodeURIComponent(t.title + " Reminder");
-                        const details = encodeURIComponent(t.reminderBody);
-                        const location = encodeURIComponent("Home");
+                      const text = encodeURIComponent(t.title + " Reminder");
+                      const details = encodeURIComponent(t.reminderBody);
+                      const location = encodeURIComponent("Home");
 
-                        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}&location=${location}&sf=true&output=xml&recur=RRULE:FREQ=DAILY`;
+                      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}&location=${location}&sf=true&output=xml&recur=RRULE:FREQ=DAILY`;
 
-                        window.open(url, '_blank');
-                      }}
-                      className="clay-btn"
-                      style={{ flex: 2, padding: '12px', fontSize: '1rem', background: 'var(--color-secondary)', color: 'white' }}
-                    >
-                      📅 {t.addToCalendar}
-                    </button>
-                  </div>
+                      window.open(url, '_blank');
+                    }}
+                    className="clay-btn"
+                    style={{ width: '100%', padding: '12px', fontSize: '1rem', background: 'var(--color-secondary)', color: 'white' }}
+                  >
+                    📅 {t.addToCalendar}
+                  </button>
                 </div>
               </div>
 
