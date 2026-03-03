@@ -26,6 +26,10 @@ const translations = {
     clickEdit: 'Click a day to edit',
     monthlyBill: 'Monthly Bill',
     estBill: 'Estimated Bill',
+    paidStatus: 'Paid',
+    pendingStatus: 'Pending',
+    markPaid: 'Mark as Paid',
+    markPending: 'Mark as Pending',
     totalMilk: 'Total Milk This Month',
     settings: 'Settings',
     pricePerLiter: 'Price per Liter (₹)',
@@ -68,6 +72,10 @@ const translations = {
     clickEdit: 'बदलने के लिए तारीख चुनें',
     monthlyBill: 'मासिक बिल',
     estBill: 'अनुमानित बिल',
+    paidStatus: 'भुगतान हो गया',
+    pendingStatus: 'बाकी है',
+    markPaid: 'भुगतान करें',
+    markPending: 'बाकी करें',
     totalMilk: 'इस महीने कुल दूध',
     settings: 'सेटिंग्स',
     pricePerLiter: 'प्रति लीटर कीमत (₹)',
@@ -109,6 +117,10 @@ const translations = {
     clickEdit: 'बदलण्यासाठी तारीख निवडा',
     monthlyBill: 'मासिक बिल',
     estBill: 'अंदाजे बिल',
+    paidStatus: 'पेड',
+    pendingStatus: 'प्रलंबित',
+    markPaid: 'पैसे दिले',
+    markPending: 'पैसे बाकी',
     totalMilk: 'या महिन्यात एकूण दूध',
     settings: 'सेटिंग्ज',
     pricePerLiter: 'प्रति लिटर किंमत (₹)',
@@ -149,6 +161,7 @@ export default function Home() {
 
   // Data State
   const [entries, setEntries] = useState<Record<string, Entry>>({});
+  const [payments, setPayments] = useState<Record<string, boolean>>({});
   const [pricePerLiter, setPricePerLiter] = useState<number>(60); // Default 60
   const [defaultAmount, setDefaultAmount] = useState<number>(1); // Default 1L
   const [monthTotal, setMonthTotal] = useState<number>(0);
@@ -304,6 +317,7 @@ export default function Home() {
     const savedEntries = localStorage.getItem('daily-doodh-entries');
     const savedPrice = localStorage.getItem('daily-doodh-price');
     const savedTime = localStorage.getItem('daily-doodh-time');
+    const savedPayments = localStorage.getItem('daily-doodh-payments');
 
     if (savedPrice) {
       setPricePerLiter(Number(savedPrice));
@@ -316,6 +330,10 @@ export default function Home() {
       const parsedEntries = JSON.parse(savedEntries);
       setEntries(parsedEntries);
       calculateMonthTotal(parsedEntries);
+    }
+
+    if (savedPayments) {
+      setPayments(JSON.parse(savedPayments));
     }
   }, []);
 
@@ -341,6 +359,13 @@ export default function Home() {
     const newDate = new Date(viewDate);
     newDate.setMonth(newDate.getMonth() + increment);
     setViewDate(newDate);
+  };
+
+  const togglePaymentStatus = () => {
+    const monthKey = `${viewDate.getFullYear()}-${String(viewDate.getMonth() + 1).padStart(2, '0')}`;
+    const newPayments = { ...payments, [monthKey]: !payments[monthKey] };
+    setPayments(newPayments);
+    localStorage.setItem('daily-doodh-payments', JSON.stringify(newPayments));
   };
 
 
@@ -773,8 +798,26 @@ export default function Home() {
             <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
                 <div style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>{t.estBill}</div>
-                <div style={{ fontSize: '3rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                  ₹{monthTotal * pricePerLiter}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                    ₹{monthTotal * pricePerLiter}
+                  </div>
+                  <button
+                    onClick={togglePaymentStatus}
+                    className="clay-btn"
+                    style={{
+                      padding: '8px 16px',
+                      fontSize: '0.9rem',
+                      fontWeight: 'bold',
+                      borderRadius: '20px',
+                      background: payments[`${viewDate.getFullYear()}-${String(viewDate.getMonth() + 1).padStart(2, '0')}`] ? 'var(--color-primary)' : 'var(--card-bg)',
+                      color: payments[`${viewDate.getFullYear()}-${String(viewDate.getMonth() + 1).padStart(2, '0')}`] ? (darkMode ? '#fff' : '#1f2937') : 'var(--text-main)',
+                      border: payments[`${viewDate.getFullYear()}-${String(viewDate.getMonth() + 1).padStart(2, '0')}`] ? 'none' : '2px solid var(--color-primary)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {payments[`${viewDate.getFullYear()}-${String(viewDate.getMonth() + 1).padStart(2, '0')}`] ? `✅ ${t.paidStatus}` : `⏳ ${t.pendingStatus}`}
+                  </button>
                 </div>
               </div>
               <div>
