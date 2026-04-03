@@ -1,6 +1,6 @@
 # Daily Doodh 🥛
 
-**Daily Doodh** is a personal milk tracking application designed to help you keep track of your daily milk delivery, calculate monthly bills, and view consumption statistics. It features a unique, modern Claymorphism design aesthetic that makes tracking fun and visually appealing.
+**Daily Doodh** is a personal milk tracking application designed to help you keep track of your daily milk delivery, calculate monthly bills,and keep the record of transactions and view consumption statistics. It features a unique, modern Claymorphism design aesthetic that makes tracking fun and visually appealing.
 
 ## Features
 
